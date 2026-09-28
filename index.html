@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="曾丽华的个人视频内容运营与视频剪辑作品集。" />
+    <title>ZENG LIHUA | Video Content Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="site-shell">
+      <div class="grain" aria-hidden="true"></div>
+
+      <header class="site-header">
+        <a class="brand" href="#home" aria-label="返回首页">
+          <span class="brand-name">ZENG LIHUA</span>
+        </a>
+
+        <nav class="main-nav" id="mainNav" aria-label="主导航">
+          <a class="nav-link is-active" href="#home" data-nav="home">
+            <span>首页</span>
+          </a>
+          <a class="nav-link" href="#about" data-nav="about">
+            <span>个人简介</span>
+          </a>
+          <a class="nav-link" href="#portfolio" data-nav="portfolio">
+            <span>作品集</span>
+          </a>
+          <a class="nav-link" href="#contact" data-nav="contact">
+            <span>联系方式</span>
+          </a>
+        </nav>
+
+        <button class="menu-toggle" type="button" aria-controls="mainNav" aria-expanded="false">
+          <span class="menu-icon" aria-hidden="true"><i></i><i></i></span>
+          <span>菜单</span>
+        </button>
+      </header>
+
+      <main>
+        <section class="hero section-pad" id="home">
+          <div class="hero-copy reveal">
+            <h1>PORTFOLIO</h1>
+            <div class="hero-actions">
+              <a class="hero-link" href="#portfolio">查看作品</a>
+              <a class="hero-link" href="#about">了解我</a>
+            </div>
+          </div>
+        </section>
+
+        <section class="about section-pad" id="about">
+          <div class="about-photo-frame reveal">
+            <img id="profilePhoto" hidden src="" alt="" />
+            <span id="photoPlaceholderCopy" class="photo-placeholder-copy">个人照片<br /><small>待替换</small></span>
+          </div>
+
+          <div class="about-content reveal reveal-delay-1">
+            <div class="section-label"><span>01 / 关于我</span><i></i></div>
+            <h2 class="profile-name"><span>姓名：</span><strong id="profileName"></strong></h2>
+            <div class="profile-facts" aria-label="基本信息">
+              <div class="profile-fact"><span>专业</span><strong id="profileMajor"></strong></div>
+              <div class="profile-fact"><span>工作年限</span><strong id="profileExperience"></strong></div>
+              <div class="profile-fact"><span>MBTI</span><strong id="profileMbti"></strong></div>
+            </div>
+            <div class="about-block">
+              <h3>擅长能力</h3>
+              <div class="capability-grid" id="capabilityGrid"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="portfolio section-pad" id="portfolio">
+          <div class="section-heading reveal">
+            <div>
+              <div class="section-label"><span>02 / 作品集</span><i></i></div>
+              <h2>作品集</h2>
+            </div>
+          </div>
+
+          <div class="portfolio-type-grid reveal" aria-label="作品集分类">
+            <button class="portfolio-type-button" type="button" data-portfolio-type="video" aria-controls="videoWorksPanel" aria-pressed="false">
+              <span class="type-title">视频作品</span>
+            </button>
+            <button class="portfolio-type-button" type="button" data-portfolio-type="social" aria-controls="socialMediaPanel" aria-pressed="false">
+              <span class="type-title">运营账号</span>
+            </button>
+            <button class="portfolio-type-button" type="button" data-portfolio-type="script" aria-controls="scriptCapability" aria-pressed="false">
+              <span class="type-title">脚本能力</span>
+            </button>
+          </div>
+
+          <div class="portfolio-panel" id="videoWorksPanel" hidden>
+            <div class="filter-row reveal" id="videoFilters" aria-label="视频作品类型筛选"></div>
+            <div class="portfolio-grid" id="portfolioGrid"></div>
+          </div>
+
+          <div class="portfolio-panel social-panel" id="socialMediaPanel" hidden>
+            <div class="account-case-list" id="accountCasesGrid"></div>
+          </div>
+
+          <section class="script-capability portfolio-panel" id="scriptCapability" hidden>
+            <div class="script-section-heading reveal">
+              <div class="section-label"><span>脚本能力</span><i></i></div>
+              <h3>脚本能力</h3>
+            </div>
+            <div class="script-grid" id="scriptGrid"></div>
+          </section>
+        </section>
+
+        <section class="contact section-pad" id="contact">
+          <div class="contact-top reveal">
+            <div class="section-label"><span>03 / 联系方式</span><i></i></div>
+          </div>
+          <div class="contact-main reveal">
+            <h2>联系方式 <small>CONTACT</small></h2>
+            <div class="contact-info">
+              <a id="contactEmailLink" href="#"><span>邮箱</span><strong id="contactEmail"></strong><i aria-hidden="true">↗</i></a>
+              <a id="contactPhoneLink" href="#"><span>电话</span><strong id="contactPhone"></strong><i aria-hidden="true">↗</i></a>
+              <div class="contact-info-static"><span>微信</span><strong id="contactWechat"></strong></div>
+            </div>
+          </div>
+          <div class="contact-footer reveal">
+            <span>© 2026 曾丽华</span>
+            <a href="#home">返回顶部 ↑</a>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog class="project-dialog" id="projectDialog">
+      <button class="dialog-close" type="button" aria-label="关闭项目详情">×</button>
+      <div class="dialog-placeholder feature-blue">
+        <span class="placeholder-kicker">项目详情</span>
+        <span class="placeholder-play">▶</span>
+        <span>真实视频封面 / 视频链接待替换</span>
+      </div>
+      <div class="dialog-content">
+        <span class="block-label" id="dialogCategory">作品类型</span>
+        <h2 id="dialogTitle">项目标题占位</h2>
+        <p id="dialogDescription">项目描述、平台信息与个人职责将显示在这里。</p>
+        <div class="dialog-tags" id="dialogTags"></div>
+      </div>
+    </dialog>
+
+    <dialog class="script-dialog" id="scriptDialog">
+      <button class="script-dialog-close" type="button" aria-label="关闭脚本预览">×</button>
+      <div class="script-dialog-stage" id="scriptDialogStage"></div>
+      <div class="script-dialog-footer">
+        <strong id="scriptDialogTitle">脚本 01</strong>
+      </div>
+    </dialog>
+
+    <script src="data/portfolio-data.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
