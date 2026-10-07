@@ -23,7 +23,7 @@ window.portfolioData = {
   },
 
   // The filter labels are kept here so the page component does not own portfolio content.
-  videoCategories: ["全部", "口播", "采访", "宣传片", "信息流", "探店", "短剧"],
+  videoCategories: ["全部", "口播", "采访", "IG剪辑", "宣传片", "信息流", "探店", "短剧"],
 
   videoWorks: [
     {
