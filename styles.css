@@ -39,7 +39,7 @@ button { border: 0; font: inherit; cursor: pointer; }
   right: 0;
   z-index: 15;
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr auto auto;
   align-items: center;
   min-height: 82px;
   padding: 14px 6vw;
@@ -51,6 +51,8 @@ button { border: 0; font: inherit; cursor: pointer; }
 .brand { display: inline-flex; align-items: center; width: fit-content; }
 .brand-name { color: var(--muted); font: 600 11px/1 var(--display); letter-spacing: 0.08em; }
 .main-nav { display: flex; justify-content: flex-end; gap: clamp(30px, 5vw, 76px); }
+.header-admin-link { margin-left: clamp(20px, 3vw, 42px); color: var(--muted); font: 600 11px/1 var(--display); letter-spacing: .08em; white-space: nowrap; }
+.header-admin-link:hover { color: var(--red); }
 .nav-link { position: relative; text-align: center; }
 .nav-link span { display: block; color: var(--blue-deep); font-size: 15px; font-weight: 700; }
 .nav-link::after {
@@ -367,7 +369,7 @@ button.account-case-image:hover, button.account-case-image:focus-visible { borde
 .reveal-delay-3 { transition-delay: 260ms; }
 
 @media (max-width: 900px) {
-  .site-header { grid-template-columns: 1fr auto; }
+  .site-header { grid-template-columns: 1fr auto auto; }
   .main-nav { position: absolute; top: 81px; right: 5vw; left: 5vw; display: none; padding: 18px; border: 1px solid var(--line); background: var(--cream); box-shadow: 0 12px 30px rgba(36,54,92,.13); }
   .main-nav.is-open { display: grid; grid-template-columns: repeat(4, 1fr); }
   .menu-toggle { display: inline-flex; align-items: center; gap: 9px; color: var(--blue-deep); font: 700 10px var(--display); letter-spacing: .1em; }
@@ -386,6 +388,7 @@ button.account-case-image:hover, button.account-case-image:focus-visible { borde
 @media (max-width: 620px) {
   .site-header { min-height: 70px; padding: 12px 18px; }
   .brand-name { font-size: 10px; }
+  .header-admin-link { margin-left: 12px; font-size: 10px; }
   .main-nav { top: 69px; right: 18px; left: 18px; }
   .main-nav.is-open { grid-template-columns: repeat(2, 1fr); gap: 22px; }
   .nav-link::after { bottom: -7px; }

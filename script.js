@@ -3,6 +3,8 @@ const siteContent = localPortfolioData.siteContent || {};
 let videoWorks = [...localPortfolioData.videoWorks];
 let scriptWorks = [...localPortfolioData.scriptWorks];
 let accountCases = [...(localPortfolioData.accountCases || [])];
+const supabaseConfig = window.supabaseConfig || {};
+let publicSupabase = null;
 
 const navLinks = [...document.querySelectorAll(".nav-link")];
 const menuToggle = document.querySelector(".menu-toggle");
@@ -56,6 +58,51 @@ function safeToneClass(value, fallback) {
   return allowed.includes(value) ? value : fallback;
 }
 
+function isSupabaseConfigured() {
+  return Boolean(
+    supabaseConfig.url
+    && supabaseConfig.anonKey
+    && window.supabase
+    && typeof window.supabase.createClient === "function"
+  );
+}
+
+function mapRemoteVideoWork(row) {
+  return {
+    id: row.id,
+    title: row.title || "未命名作品",
+    category: row.category || "口播",
+    videoUrl: row.video_url || "",
+    coverUrl: row.cover_url || "",
+    aspectRatio: row.aspect_ratio || "9:16",
+    cardAspectRatio: row.card_aspect_ratio || row.aspect_ratio || "3:4",
+    role: row.role || "",
+    result: row.result || "",
+    description: row.description || "",
+    detailKeywords: Array.isArray(row.detail_keywords) ? row.detail_keywords : [],
+    platform: row.platform || "",
+    tone: row.tone || "card-blue",
+    isPublished: row.is_published !== false,
+    sortOrder: Number.isFinite(Number(row.sort_order)) ? Number(row.sort_order) : 0,
+  };
+}
+
+async function loadRemoteVideoWorks() {
+  if (!isSupabaseConfigured()) return;
+  publicSupabase = window.supabase.createClient(supabaseConfig.url, supabaseConfig.anonKey);
+  const { data, error } = await publicSupabase
+    .from("video_works")
+    .select("*")
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: true });
+
+  if (error || !Array.isArray(data)) return;
+
+  videoWorks = data.map(mapRemoteVideoWork)
+    .filter((item) => item.isPublished !== false)
+    .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+}
+
 function applySiteContent(content) {
   const profileName = document.querySelector("#profileName");
   const profileMajor = document.querySelector("#profileMajor");
@@ -97,7 +144,7 @@ function applySiteContent(content) {
 }
 
 function renderVideoFilters() {
-  const categories = localPortfolioData.videoCategories || ["全部", "口播", "宣传片", "信息流", "探店", "短剧"];
+  const categories = localPortfolioData.videoCategories || ["全部", "口播", "采访", "IG剪辑", "宣传片", "信息流", "探店", "短剧"];
   videoFiltersContainer.innerHTML = categories.map((category, index) => `
     <button class="filter-button${index === 0 ? " is-active" : ""}" type="button" data-video-filter="${escapeHtml(category)}" aria-pressed="${index === 0}">${escapeHtml(category)}</button>
   `).join("");
@@ -625,8 +672,9 @@ window.addEventListener("scroll", updateActiveNav, { passive: true });
 window.addEventListener("resize", updateActiveNav);
 window.addEventListener("pagehide", stopProjectMedia);
 
-function initializePortfolio() {
+async function initializePortfolio() {
   applySiteContent(siteContent);
+  await loadRemoteVideoWorks().catch(() => {});
   renderVideoFilters();
   renderAccountCases();
   renderScriptWorks();

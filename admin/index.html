@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="作品集视频管理后台" />
+    <title>作品管理 | ZENG LIHUA</title>
+    <link rel="stylesheet" href="admin.css" />
+  </head>
+  <body>
+    <header class="admin-header">
+      <a class="admin-brand" href="../">ZENG LIHUA <span>/ 视频管理</span></a>
+      <a class="back-link" href="../">返回作品集</a>
+    </header>
+
+    <main class="admin-shell">
+      <section class="admin-intro">
+        <p class="eyebrow">PRIVATE CONTENT STUDIO</p>
+        <h1>视频作品管理</h1>
+        <p>登录后可以新增、编辑、替换、下架和发布视频作品。</p>
+      </section>
+
+      <section class="panel auth-panel" id="authPanel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">ADMIN ACCESS</p>
+            <h2>登录管理后台</h2>
+          </div>
+        </div>
+        <p class="form-note" id="setupMessage" hidden></p>
+        <form id="loginForm" class="login-form">
+          <label>
+            登录邮箱
+            <input id="loginEmail" name="email" type="email" autocomplete="username" required />
+          </label>
+          <label>
+            登录密码
+            <input id="loginPassword" name="password" type="password" autocomplete="current-password" required />
+          </label>
+          <button class="primary-button" type="submit">登录</button>
+        </form>
+        <p class="status-message" id="authStatus" role="status"></p>
+      </section>
+
+      <section class="dashboard" id="dashboardPanel" hidden>
+        <div class="dashboard-toolbar">
+          <div>
+            <p class="eyebrow">SIGNED IN</p>
+            <h2>作品列表</h2>
+            <p class="signed-in-as" id="signedInAs"></p>
+          </div>
+          <div class="toolbar-actions">
+            <button class="secondary-button" id="newVideoButton" type="button">新增视频</button>
+            <button class="text-button" id="logoutButton" type="button">退出登录</button>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <section class="panel editor-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">VIDEO ENTRY</p>
+                <h2 id="formHeading">新增视频作品</h2>
+              </div>
+              <span class="edit-state" id="editState">NEW</span>
+            </div>
+
+            <form id="videoForm" class="video-form">
+              <input id="videoId" name="id" type="hidden" />
+              <label>
+                作品名称
+                <input id="videoTitle" name="title" type="text" maxlength="120" required />
+              </label>
+              <div class="form-row">
+                <label>
+                  作品分类
+                  <select id="videoCategory" name="category"></select>
+                </label>
+                <label>
+                  排序
+                  <input id="videoSortOrder" name="sortOrder" type="number" min="0" step="1" value="0" />
+                </label>
+              </div>
+              <div class="form-row">
+                <label>
+                  视频原始比例
+                  <input id="videoAspectRatio" name="aspectRatio" type="text" value="9:16" placeholder="例如 9:16" />
+                </label>
+                <label>
+                  卡片展示比例
+                  <input id="videoCardAspectRatio" name="cardAspectRatio" type="text" value="3:4" placeholder="例如 3:4" />
+                </label>
+              </div>
+              <label>
+                平台（可选）
+                <input id="videoPlatform" name="platform" type="text" maxlength="40" />
+              </label>
+              <label>
+                我的工作
+                <input id="videoRole" name="role" type="text" maxlength="240" />
+              </label>
+              <label>
+                项目成果
+                <input id="videoResult" name="result" type="text" maxlength="240" />
+              </label>
+              <label>
+                作品介绍
+                <textarea id="videoDescription" name="description" rows="3" maxlength="500"></textarea>
+              </label>
+              <label>
+                小标签（用逗号或顿号分隔）
+                <input id="videoKeywords" name="keywords" type="text" placeholder="例如：活动现场、路人采访" />
+              </label>
+
+              <div class="upload-field">
+                <div class="field-label">视频文件</div>
+                <p class="existing-file" id="currentVideoFile">尚未选择视频</p>
+                <input id="videoFile" name="videoFile" type="file" accept="video/mp4,video/webm,video/quicktime" />
+              </div>
+              <div class="upload-field">
+                <div class="field-label">封面文件</div>
+                <p class="existing-file" id="currentCoverFile">尚未选择封面</p>
+                <input id="coverFile" name="coverFile" type="file" accept="image/jpeg,image/png,image/webp" />
+              </div>
+
+              <label class="switch-row">
+                <input id="videoPublished" name="published" type="checkbox" checked />
+                <span>发布到公开作品集</span>
+              </label>
+
+              <div class="progress-wrap" id="uploadProgressWrap" hidden>
+                <div class="progress-meta"><span id="uploadProgressLabel">准备上传</span><strong id="uploadProgressValue">0%</strong></div>
+                <div class="progress-track"><span id="uploadProgressBar"></span></div>
+              </div>
+              <p class="status-message" id="formStatus" role="status"></p>
+
+              <div class="form-actions">
+                <button class="primary-button" id="saveVideoButton" type="submit">保存作品</button>
+                <button class="secondary-button" id="resetFormButton" type="button">清空</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="panel list-panel">
+            <div class="panel-heading list-heading">
+              <div>
+                <p class="eyebrow">PUBLISHED CONTENT</p>
+                <h2>已录入作品</h2>
+              </div>
+              <span class="count-badge" id="videoCount">0</span>
+            </div>
+            <div class="video-list" id="videoList"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <script src="../data/portfolio-data.js"></script>
+    <script src="../data/supabase-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tus-js-client@4/dist/tus.min.js"></script>
+    <script src="admin.js"></script>
+  </body>
+</html>

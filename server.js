@@ -27,7 +27,10 @@ http.createServer((request, response) => {
     return;
   }
 
-  const filePath = path.resolve(root, `.${pathname === "/" ? "/index.html" : pathname}`);
+  const requestedPath = path.resolve(root, `.${pathname === "/" ? "/" : pathname}`);
+  const filePath = pathname.endsWith("/")
+    ? path.join(requestedPath, "index.html")
+    : requestedPath;
   if (filePath !== root && !filePath.startsWith(`${root}${path.sep}`)) {
     response.writeHead(403).end("Forbidden");
     return;

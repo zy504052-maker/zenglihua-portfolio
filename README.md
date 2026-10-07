@@ -1,6 +1,6 @@
 # Zeng Lihua Portfolio
 
-这是曾丽华的视频内容创作、视频剪辑和短视频运营作品集。当前阶段使用本地文件和配置文件维护内容，不部署 GitHub，也不需要后台系统。
+这是曾丽华的视频内容创作、视频剪辑和短视频运营作品集。公开页面可以继续使用 GitHub Pages；视频作品的增改由 Supabase 登录后台管理。
 
 ## 本地预览
 
@@ -26,66 +26,33 @@ node server.js
 └─ assets/                个人照片等站点素材
 ```
 
-正式内容集中维护在 [data/portfolio-data.js](data/portfolio-data.js)。页面结构在 [index.html](index.html)，视觉样式在 [styles.css](styles.css)，一般不需要修改它们。
+正式内容集中维护在 [data/portfolio-data.js](data/portfolio-data.js)。页面结构在 [index.html](index.html)，视觉样式在 [styles.css](styles.css)。配置了 Supabase 后，视频作品可以从 [admin/](admin/) 登录管理，不需要再修改代码。
 
-## 新增一个视频作品
+## 视频管理后台配置
 
-### 1. 放入文件
+后台使用 Supabase 提供登录、数据库和文件存储。首次配置时：
 
-把视频放入：
+1. 在 Supabase Dashboard 创建项目，并在 Authentication > Users 中手动创建你的管理员邮箱和密码（密码只由你自己保管）。
+2. 在 SQL Editor 运行 [supabase/schema.sql](supabase/schema.sql)。随后将管理员用户 UUID 填入并单独运行：`insert into public.admin_users (id) values ('管理员UUID');`。
+3. 在 Project Settings > API 复制 Project URL 和 anon public key，填入 [data/supabase-config.js](data/supabase-config.js)。这里只能填写 anon key，不能填写 service_role key。
+4. 在 Authentication 设置里关闭公开注册（Allow new users to sign up），只通过 Dashboard 手动创建管理员用户。
+5. 在 Authentication > URL Configuration 中加入本地地址 `http://localhost:4173/admin/` 和 GitHub Pages 地址 `https://zy504052-maker.github.io/zenglihua-portfolio/admin/`。
+6. 打开 `http://localhost:4173/admin/` 或公开网站右上角的“管理登录”，使用管理员邮箱登录。首次打开管理后台会把已有作品初始化到数据库。
 
-```text
-public/videos/
-```
+登录后可以新增、编辑、替换封面和视频、修改分类与文字、发布、下架和删除作品。视频会上传到 Supabase Storage，公开页面只读取已发布作品；GitHub 不保存后台密码，也不保存后来上传的视频。
 
-把对应封面放入：
+Supabase Storage 有项目套餐的单文件上传上限和总容量限制。当前后台采用可续传上传，但续传不能突破项目本身的大小上限；上传较大的原始视频前，请在 Supabase 的 Storage 配置中核对套餐限制和可用容量。
 
-```text
-public/images/works/
-```
+## 新增、修改和下架视频
 
-例如：
+打开网站右上角的“管理登录”，使用管理员账号进入后台：
 
-```text
-public/videos/cat-food.mp4
-public/images/works/cat-food.jpg
-```
+- 新增：点“新增视频”，上传视频与封面，填写作品信息后保存。
+- 修改：在作品列表选择“编辑”，可调整文字、分类、比例、排序，也可替换视频或封面。
+- 发布/下架：点击作品右侧对应操作；下架作品不会出现在访客页面。
+- 删除：新建上传的云端作品会删除数据库记录和对应云端素材。初始导入的本地作品会下架保留原始文件，不会从仓库中删除。
 
-### 2. 修改配置
-
-打开 [data/portfolio-data.js](data/portfolio-data.js)，在 `videoWorks` 数组中增加一个对象：
-
-```js
-{
-  id: "cat-food",
-  title: "科学养宠｜猫咪饮食误区",
-  category: "口播",
-  videoUrl: "public/videos/cat-food.mp4",
-  aspectRatio: "16:9",
-  role: "选题策划 · 脚本 · 拍摄 · 剪辑",
-  result: "项目成果待补充",
-  description: "项目描述待补充。",
-  coverUrl: "public/images/works/cat-food.jpg",
-  platform: "小红书",
-  tone: "card-blue",
-},
-```
-
-`category` 只能使用：`口播`、`商业活动`、`宣传片`、`信息流`、`探店`、`短剧`。
-
-横屏视频填写 `16:9`。宣传片和商业活动的竖屏视频填写 `9:16`。作品墙会按照这个字段展示原始比例，不会强制裁切视频封面。
-
-### 3. 刷新页面
-
-保存配置文件后刷新本地网页即可看到作品。点击卡片可以打开详情并播放已填写的视频。
-
-## 修改、替换和删除作品
-
-- 修改名称、分类、工作内容、项目成果：编辑对应对象的 `title`、`category`、`role`、`result`。
-- 替换视频：将新文件放入 `public/videos/`，然后修改 `videoUrl`。
-- 替换封面：将新图片放入 `public/images/works/`，然后修改 `coverUrl`。
-- 删除作品：从 `videoWorks` 数组中删除整个作品对象；不再使用的媒体文件也可以从对应文件夹删除。
-- `id` 请保持每个作品唯一，建议使用英文短横线命名。
+视频上传走 Supabase Storage，GitHub 不需要重新上传媒体文件。修改网站代码或 Supabase 公共配置后，仍需提交并推送 GitHub，才能更新公开网站。
 
 ## 脚本能力
 
